@@ -13,7 +13,7 @@ namespace task11.Controllers
     public class AnimalsController : ControllerBase
     {
         private readonly IAnimalService _animalService;
-        private readonly AnimalClinicContext _context; // Added context for validation
+        private readonly AnimalClinicContext _context;
 
         public AnimalsController(IAnimalService animalService, AnimalClinicContext context)
         {
@@ -40,7 +40,7 @@ namespace task11.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Animal>> CreateAnimal(Animal animal)
+        public async Task<ActionResult<Animal>> CreateAnimal([FromBody] Animal animal)
         {
             if (string.IsNullOrWhiteSpace(animal.Name) || string.IsNullOrWhiteSpace(animal.Description))
             {
@@ -60,13 +60,12 @@ namespace task11.Controllers
             }
             catch (Exception ex)
             {
-                // Log exception
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAnimal(int id, Animal animal)
+        public async Task<IActionResult> UpdateAnimal(int id, [FromBody] Animal animal)
         {
             if (id != animal.Id)
             {
@@ -79,11 +78,10 @@ namespace task11.Controllers
             }
             catch (ConcurrencyException ex)
             {
-                return StatusCode(409, ex.Message); 
+                return StatusCode(409, ex.Message); // Conflict
             }
             catch (Exception ex)
             {
-                // Log exception
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
 

@@ -46,7 +46,6 @@ namespace task11.Services
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                // Handle concurrency exception
                 throw new ConcurrencyException("Concurrency conflict occurred", ex);
             }
         }
@@ -59,14 +58,6 @@ namespace task11.Services
                 _context.Animals.Remove(animal);
                 await _context.SaveChangesAsync();
             }
-        }
-    }
-
-    public class ConcurrencyException : Exception
-    {
-        public ConcurrencyException(string message, Exception innerException)
-            : base(message, innerException)
-        {
         }
     }
 }

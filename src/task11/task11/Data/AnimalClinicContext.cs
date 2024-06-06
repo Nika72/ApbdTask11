@@ -17,25 +17,22 @@ namespace task11.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Animal>()
                 .HasOne(a => a.AnimalType)
                 .WithMany()
-                .HasForeignKey(a => a.AnimalTypesId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(a => a.AnimalTypesId);
 
             modelBuilder.Entity<Visit>()
                 .HasOne(v => v.Animal)
                 .WithMany(a => a.Visits)
-                .HasForeignKey(v => v.AnimalId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(v => v.AnimalId);
 
             modelBuilder.Entity<Visit>()
                 .HasOne(v => v.Employee)
                 .WithMany()
-                .HasForeignKey(v => v.EmployeeId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(v => v.EmployeeId);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
