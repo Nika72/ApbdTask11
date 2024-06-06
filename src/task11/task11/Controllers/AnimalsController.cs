@@ -78,7 +78,7 @@ namespace task11.Controllers
             }
             catch (ConcurrencyException ex)
             {
-                return StatusCode(409, ex.Message); // Conflict
+                return StatusCode(409, ex.Message); // Conflic
             }
             catch (Exception ex)
             {
