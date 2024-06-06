@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using task11.Data;
+using task11.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+// Add DbContext service
+builder.Services.AddDbContext<AnimalClinicContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add application services
+builder.Services.AddScoped<IAnimalService, AnimalService>();
+builder.Services.AddScoped<IVisitService, VisitService>();
 
 var app = builder.Build();
 
@@ -16,8 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
 
 app.MapControllers();
 
