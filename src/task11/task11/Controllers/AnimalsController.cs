@@ -42,9 +42,9 @@ namespace task11.Controllers
         [HttpPost]
         public async Task<ActionResult<Animal>> CreateAnimal([FromBody] Animal animal)
         {
-            if (string.IsNullOrWhiteSpace(animal.Name) || string.IsNullOrWhiteSpace(animal.Description))
+            if (string.IsNullOrWhiteSpace(animal.Name))
             {
-                return BadRequest("Name and Description are required.");
+                return BadRequest("Name is required.");
             }
 
             var animalTypeExists = await _context.AnimalTypes.AnyAsync(at => at.Id == animal.AnimalTypesId);
