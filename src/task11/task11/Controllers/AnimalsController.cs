@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,7 @@ namespace task11.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<AnimalDto>>> GetAnimals([FromQuery] string queryBy = "Name")
         {
             var animals = await _animalService.GetAnimalsAsync(queryBy);
@@ -38,6 +40,7 @@ namespace task11.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<AnimalDto>> GetAnimal(int id)
         {
             var animal = await _animalService.GetAnimalByIdAsync(id);
@@ -56,6 +59,7 @@ namespace task11.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Animal>> CreateAnimal([FromBody] CreateAnimalDto createAnimalDto)
         {
             if (string.IsNullOrWhiteSpace(createAnimalDto.Name))
@@ -88,6 +92,7 @@ namespace task11.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateAnimal(int id, [FromBody] UpdateAnimalDto updateAnimalDto)
         {
             if (id != updateAnimalDto.Id)
@@ -122,6 +127,7 @@ namespace task11.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAnimal(int id)
         {
             var animal = await _animalService.GetAnimalByIdAsync(id);

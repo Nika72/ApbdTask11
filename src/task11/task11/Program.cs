@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using task11.Data;
+using task11.Interfaces;
 using task11.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,31 +22,23 @@ builder.Services.AddDbContext<AnimalClinicContext>(options =>
 builder.Services.AddScoped<IAnimalService, AnimalService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-// Add Authentication services
-var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]);
 builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(jwt =>
-{
-    jwt.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        RequireExpirationTime = true,
-        ValidateLifetime = true
-    };
-});
-
-// Add Authorization services
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-});
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]))
+        };
+    });
 
 var app = builder.Build();
 
@@ -55,6 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>(); // Add this line
 
 app.UseHttpsRedirection();
 

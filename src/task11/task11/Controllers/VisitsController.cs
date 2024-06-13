@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,6 +21,7 @@ namespace task11.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<VisitDto>>> GetVisits()
         {
             var visits = await _visitService.GetVisitsAsync();
@@ -34,6 +36,7 @@ namespace task11.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<VisitDto>> GetVisit(int id)
         {
             var visit = await _visitService.GetVisitByIdAsync(id);
@@ -52,6 +55,7 @@ namespace task11.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Visit>> CreateVisit([FromBody] CreateVisitDto createVisitDto)
         {
             var visit = new Visit
@@ -66,6 +70,7 @@ namespace task11.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateVisit(int id, [FromBody] UpdateVisitDto updateVisitDto)
         {
             if (id != updateVisitDto.Id)
@@ -88,6 +93,7 @@ namespace task11.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteVisit(int id)
         {
             var visit = await _visitService.GetVisitByIdAsync(id);
