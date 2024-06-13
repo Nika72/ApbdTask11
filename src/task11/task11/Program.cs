@@ -53,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ExceptionHandlingMiddleware>(); // Add this line
+app.UseMiddleware<ExceptionHandlingMiddleware>(); 
 
 app.UseHttpsRedirection();
 
