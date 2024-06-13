@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using task11.Data;
 using task11.Models;
 
@@ -34,6 +33,7 @@ namespace task11.Services
 
         public async Task UpdateVisitAsync(Visit visit)
         {
+            _context.Entry(visit).OriginalValues["RowVersion"] = visit.RowVersion;
             _context.Entry(visit).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

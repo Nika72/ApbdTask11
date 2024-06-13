@@ -14,6 +14,7 @@ namespace task11.Data
         public DbSet<AnimalType> AnimalTypes { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Visit> Visits { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -17,7 +17,7 @@ namespace task11.Models
         public DateTime Date { get; set; }
 
         [Timestamp]
-        public byte[] RowVersion { get; set; }  // Concurrency token
+        public byte[] RowVersion { get; set; }
 
         public Employee Employee { get; set; }
         public Animal Animal { get; set; }
