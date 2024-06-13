@@ -24,6 +24,10 @@ builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
+// Configure JWT Authentication
+var jwtSecretKey = builder.Configuration["JwtConfig:Secret"];
+var key = Encoding.ASCII.GetBytes(jwtSecretKey);
+
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -36,7 +40,7 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtConfig:Secret"]))
+            IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
 
